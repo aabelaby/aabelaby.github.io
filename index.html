@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-05TL66YZ53"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-05TL66YZ53');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Currently immersed in a Bachelor of Technology program at Viswajyothi College of Engineering and Technology, my academic journey melds a robust foundation in computer science with an appetite for complex problem-solving using Java and C++. With certifications in C programming, Python. Beyond the classroom, my interest in photography enhances my attention to detail and creative thinking, vital competencies in my field of study. These skills are not only academic assets but also infuse my technological endeavors with innovative perspectives, driving my ambition to contribute significantly to future tech solutions.">
@@ -25,7 +34,7 @@
         }
 
         .section-heading {
-            @apply text-4xl md:text-5xl font-bold text-center text-white;
+            @apply text-4xl md:text-5xl font-bold text-center;
         }
         .section-underline {
             @apply w-20 h-1 bg-green-500 mx-auto mt-4 mb-12;
@@ -95,31 +104,9 @@
 
         <!-- About Section -->
         <section id="about" class="py-20">
-            <h2 class="section-heading">About Me</h2>
+            <h2 class="section-heading gradient-text">About Me</h2>
             <div class="section-underline"></div>
             
-            <div class="mb-16">
-                <h3 class="text-2xl font-semibold text-center text-purple-400 mb-8">Leadership & Activities</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card">
-                        <h4 class="font-bold text-lg text-white">Coordinator</h4>
-                        <p class="text-gray-400">Datavoid Trivia at Bodhi Techfest 2025</p>
-                    </div>
-                    <div class="card">
-                        <h4 class="font-bold text-lg text-white">GDG Member</h4>
-                        <p class="text-gray-400">Google Developer Groups - VJCET Campus</p>
-                    </div>
-                    <div class="card">
-                        <h4 class="font-bold text-lg text-white">IIIC Member</h4>
-                        <p class="text-gray-400">Industry Institute Interaction Cell - VJCET</p>
-                    </div>
-                    <div class="card">
-                        <h4 class="font-bold text-lg text-white">CTF Participant</h4>
-                        <p class="text-gray-400">CTF-Buffer CTF (National Level Challenge)</p>
-                    </div>
-                </div>
-            </div>
-
             <div class="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto mb-16">
                 <div class="md:col-span-2">
                     <p class="text-lg text-gray-300 leading-relaxed mb-6">
@@ -145,69 +132,94 @@
                 </div>
             </div>
 
-            <!-- Experiential Learning Section -->
             <div class="mb-16">
-                <h3 class="text-2xl font-semibold text-center text-purple-400 mb-8">Experiential Learning</h3>
-                <div class="max-w-3xl mx-auto space-y-12">
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <h3 class="text-xl font-bold text-green-400 mb-1">Young Innovators Programme 5.0 (K-DISC)</h3>
-                        <p class="text-gray-400">Successfully submitted an idea, Online Fuel Delivery System, which was selected and recognized for innovation by the Kerala Development & Innovation Strategic Council.</p>
+                <h3 class="text-2xl font-semibold text-center text-purple-400 mb-8">Leadership & Activities</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="card">
+                        <h4 class="font-bold text-lg text-white">Coordinator</h4>
+                        <p class="text-gray-400">Datavoid Trivia at Bodhi Techfest 2025</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <h3 class="text-xl font-bold text-green-400 mb-1">CTF-Buffer CTF (National Level Challenge)</h3>
-                        <p class="text-gray-400">Participated in cybersecurity challenges in forensics and cryptography.</p>
+                    <div class="card">
+                        <h4 class="font-bold text-lg text-white">GDG Member</h4>
+                        <p class="text-gray-400">Google Developer Groups - VJCET Campus</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <h3 class="text-xl font-bold text-green-400 mb-1">Internship: Artificial Intelligence & Computer Vision (Techmaghi)</h3>
-                        <p class="text-gray-400">Worked on AI and computer vision applications using Python. Developed skills in image processing, data analysis, and industry-relevant programming techniques.</p>
+                    <div class="card">
+                        <h4 class="font-bold text-lg text-white">IIIC Member</h4>
+                        <p class="text-gray-400">Industry Institute Interaction Cell - VJCET</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <h3 class="text-xl font-bold text-green-400 mb-1">Project: Personalized Skincare Recommendations</h3>
-                        <p class="text-gray-400">A web app providing tailored skincare recommendations based on user input, with secure authentication, database storage using Django.</p>
+                    <div class="card">
+                        <h4 class="font-bold text-lg text-white">CTF Participant</h4>
+                        <p class="text-gray-400">CTF-Buffer CTF (National Level Challenge)</p>
                     </div>
                 </div>
             </div>
-            
-            <!-- Internships Section -->
-            <div class="mb-16">
-                <h3 class="text-2xl font-semibold text-center text-purple-400 mb-8">Internships</h3>
-                <div class="max-w-3xl mx-auto space-y-12">
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <h3 class="text-xl font-bold text-green-400 mb-1">Internship Certificate Program in Python+Django</h3>
-                        <p class="text-gray-300 font-semibold">Progressive Software Solutions & Training</p>
-                        <p class="text-sm text-gray-500 mb-2">Jan 2025 - Mar 2025</p>
-                        <p class="text-gray-400">Successfully completed the Internship Certificate Program in Python+Django with PCPL (Certificate No. PCPL/INTRN/0325/031).</p>
-                    </div>
-                </div>
-            </div>
+        </section>
 
-            <!-- Technical Skills Section -->
-            <div>
-                <h3 class="text-2xl font-semibold text-center text-purple-400 mb-8">Technical Skills</h3>
-                <div class="flex flex-wrap justify-center items-center gap-4 max-w-4xl mx-auto">
-                    <div class="skill-tag">Python 🐍</div>
-                    <div class="skill-tag">C ⚡</div>
-                    <div class="skill-tag">Django 🎯</div>
-                    <div class="skill-tag">AI/ML 🤖</div>
-                    <div class="skill-tag">Cybersecurity 🔒</div>
-                    <div class="skill-tag">VS Code 💻</div>
-                    <div class="skill-tag">Git 🔧</div>
-                    <div class="skill-tag">SQL 🗄️</div>
-                    <div class="skill-tag">HTML 🌐</div>
-                    <div class="skill-tag">Java ☕</div>
-                    <div class="skill-tag">Design 🎨</div>
+        <!-- Experiential Learning Section -->
+        <section id="experiential-learning" class="py-20">
+            <h2 class="section-heading gradient-text">Experiential Learning</h2>
+            <div class="section-underline"></div>
+            <div class="max-w-3xl mx-auto space-y-12">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-bold text-green-400 mb-1">Young Innovators Programme 5.0 (K-DISC)</h3>
+                    <p class="text-gray-400">Successfully submitted an idea, Online Fuel Delivery System, which was selected and recognized for innovation by the Kerala Development & Innovation Strategic Council.</p>
                 </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-bold text-green-400 mb-1">CTF-Buffer CTF (National Level Challenge)</h3>
+                    <p class="text-gray-400">Participated in cybersecurity challenges in forensics and cryptography.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-bold text-green-400 mb-1">Internship: Artificial Intelligence & Computer Vision (Techmaghi)</h3>
+                    <p class="text-gray-400">Worked on AI and computer vision applications using Python. Developed skills in image processing, data analysis, and industry-relevant programming techniques.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-bold text-green-400 mb-1">Project: Personalized Skincare Recommendations</h3>
+                    <p class="text-gray-400">A web app providing tailored skincare recommendations based on user input, with secure authentication, database storage using Django.</p>
+                </div>
+            </div>
+        </section>
+            
+        <!-- Internships Section -->
+        <section id="internships" class="py-20">
+            <h2 class="section-heading gradient-text">Internships</h2>
+            <div class="section-underline"></div>
+            <div class="max-w-3xl mx-auto space-y-12">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h3 class="text-xl font-bold text-green-400 mb-1">Internship Certificate Program in Python+Django</h3>
+                    <p class="text-gray-300 font-semibold">Progressive Software Solutions & Training</p>
+                    <p class="text-sm text-gray-500 mb-2">Jan 2025 - Mar 2025</p>
+                    <p class="text-gray-400">Successfully completed the Internship Certificate Program in Python+Django with PCPL (Certificate No. PCPL/INTRN/0325/031).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section id="skills" class="py-20">
+            <h2 class="section-heading gradient-text">Technical Skills</h2>
+            <div class="section-underline"></div>
+            <div class="flex flex-wrap justify-center items-center gap-4 max-w-4xl mx-auto">
+                <div class="skill-tag">Python 🐍</div>
+                <div class="skill-tag">C ⚡</div>
+                <div class="skill-tag">Django 🎯</div>
+                <div class="skill-tag">AI/ML 🤖</div>
+                <div class="skill-tag">Cybersecurity 🔒</div>
+                <div class="skill-tag">VS Code 💻</div>
+                <div class="skill-tag">Git 🔧</div>
+                <div class="skill-tag">SQL 🗄️</div>
+                <div class="skill-tag">HTML 🌐</div>
+                <div class="skill-tag">Java ☕</div>
+                <div class="skill-tag">Design 🎨</div>
             </div>
         </section>
 
         <!-- Projects Section -->
         <section id="projects" class="py-20">
-            <h2 class="section-heading" style="color: #A855F7;">Projects</h2>
+            <h2 class="section-heading gradient-text">Projects</h2>
             <div class="section-underline"></div>
             <p class="text-center max-w-3xl mx-auto text-gray-400 mb-12">Here are some of the projects I've been working on. Each one represents a step in my learning journey and passion for creating meaningful solutions.</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -243,7 +255,7 @@
 
         <!-- Contact Section -->
         <section id="contact" class="py-20 text-center">
-            <h2 class="section-heading">Let's Connect</h2>
+            <h2 class="section-heading text-white">Let's Connect</h2>
              <div class="section-underline"></div>
             <p class="max-w-2xl mx-auto text-lg text-gray-400 mb-8">
                 I'm always interested in new opportunities, collaborations, and conversations. Feel free to reach out if you'd like to connect!
