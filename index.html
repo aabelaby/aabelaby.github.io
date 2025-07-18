@@ -59,6 +59,7 @@
             height: 100%;
             background-color: rgba(15, 16, 30, 0.6); /* Semi-transparent overlay */
             z-index: -2;
+            transition: background-color 0.3s ease; /* Smooth transition for color change */
         }
 
         #particle-canvas {
@@ -251,7 +252,7 @@
             <div class="glass-card p-10">
                 <div class="flex flex-wrap justify-center items-center gap-8">
                     <div class="skill-tag"><img src="https://www.vectorlogo.zone/logos/python/python-icon.svg" class="w-8 h-8" alt="Python"></div>
-                    <div class="skill-tag"><img src="https://www.vectorlogo.zone/logos/gnu_c/gnu_c-icon.svg" class="w-8 h-8" alt="C" onerror="this.src='https://www.vectorlogo.zone/logos/cprogramming/cprogramming-icon.svg';"></div>
+                    <div class="skill-tag"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/c/c-original.svg" class="w-8 h-8" alt="C"></div>
                     <div class="skill-tag"><img src="https://www.vectorlogo.zone/logos/djangoproject/djangoproject-icon.svg" class="w-8 h-8" alt="Django"></div>
                     <div class="skill-tag"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10.5 10a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"></path><path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Z"></path><path d="M10 3.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5Zm0 11a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5Zm5.03-10.03a.5.5 0 0 1 .707 0l.707.707a.5.5 0 0 1 0 .707l-.707.707a.5.5 0 0 1-.707 0l-.707-.707a.5.5 0 0 1 0-.707Zm-10.06 0a.5.5 0 0 1 0 .707l-.707.707a.5.5 0 0 1-.707 0L2.75 4.93a.5.5 0 0 1 0-.707l.707-.707a.5.5 0 0 1 .707 0Zm11.47 4.59a.5.5 0 0 1 0 .707l-.707.707a.5.5 0 0 1-.707 0l-.707-.707a.5.5 0 0 1 0-.707l.707-.707a.5.5 0 0 1 .707 0Zm-4.97 7.53a.5.5 0 0 1 0-.707l.707-.707a.5.5 0 0 1 .707 0l.707.707a.5.5 0 0 1 0 .707l-.707.707a.5.5 0 0 1-.707 0l-.707-.707ZM16.5 10a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1 0-1h1a.5.5 0 0 1 .5.5Zm-12 0a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1 0-1h1a.5.5 0 0 1 .5.5Z"></path></svg></div>
                     <div class="skill-tag"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20"><path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.21 13.79l-2.5-2.5a.5.5 0 0 1 .707-.707L9.21 12.38l4.04-4.04a.5.5 0 0 1 .707.707l-4.74 4.75Z"></path><path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM2 10a8 8 0 1 1 16 0 8 8 0 0 1-16 0Z"></path><path d="m10.23 6.09-3.72 6.44a.5.5 0 0 0 .43.75h7.44a.5.5 0 0 0 .43-.75L11.08 6.09a.5.5 0 0 0-.86 0Z"></path></svg></div>
@@ -331,6 +332,10 @@
         </div>
         <p class="text-gray-500 text-base">© 2024 Aabel Aby. Built with React, TypeScript, and lots of ☕</p>
     </footer>
+
+    <a href="#home" id="back-to-top-btn" class="fixed bottom-8 right-8 z-50 p-3 rounded-full bg-purple-600 text-white shadow-lg hover:bg-purple-700 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+    </a>
 
     <script>
         // --- Particle Network Script ---
@@ -466,6 +471,32 @@
 
         revealElements.forEach(element => {
             revealObserver.observe(element);
+        });
+
+        // --- Combined Scroll Effects Script ---
+        const backToTopBtn = document.getElementById('back-to-top-btn');
+        const backgroundOverlay = document.querySelector('.background-overlay');
+
+        window.addEventListener('scroll', () => {
+            // --- Back to Top Button Logic ---
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+                backToTopBtn.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'pointer-events-auto');
+                backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+
+            // --- Background Darken on Scroll Logic ---
+            const scrollPosition = window.scrollY;
+            const maxScroll = 800; // The scroll distance over which the background reaches max darkness
+            const baseAlpha = 0.6;
+            const maxAlpha = 0.85; // The darkest the overlay will get
+            
+            let additionalAlpha = (maxAlpha - baseAlpha) * (scrollPosition / maxScroll);
+            let newAlpha = Math.min(maxAlpha, baseAlpha + additionalAlpha);
+
+            backgroundOverlay.style.backgroundColor = `rgba(15, 16, 30, ${newAlpha})`;
         });
     </script>
 </body>
