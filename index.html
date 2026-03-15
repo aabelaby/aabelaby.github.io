@@ -1,986 +1,672 @@
 <!DOCTYPE html>
 <!--
-  ╔══════════════════════════════════════════════════════════════════╗
-  ║  AABEL ABY — Futuristic Portfolio Website                      ║
-  ║  Single-file HTML + CSS + Vanilla JS                           ║
-  ║  Design: Dark sci-fi / cyberpunk with neon accents             ║
-  ╚══════════════════════════════════════════════════════════════════╝
-  Every section, style rule, and function is heavily commented
-  so the code is self-documenting from top to bottom.
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  AABEL ABY — Professional Portfolio + AI Chatbot            ║
+  ║  Single-file HTML + CSS + Vanilla JS                        ║
+  ║  Features: Bento Grid, Kinetic Type, Micro-interactions,    ║
+  ║            AI "Ask My Portfolio" chatbot                     ║
+  ╚══════════════════════════════════════════════════════════════╝
 -->
 <html lang="en">
 <head>
-  <!-- ═══ META ═══ Basic character-set and responsive viewport -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- ═══ SEO ═══ Title & description for search engines -->
   <title>Aabel Aby — Portfolio</title>
-  <meta name="description" content="Futuristic portfolio of Aabel Aby — BTech CSE student, Python developer, and ML enthusiast." />
+  <meta name="description" content="Portfolio of Aabel Aby — BTech CSE, ML enthusiast, Infosys intern." />
 
-  <!-- ═══ CDN: Tailwind CSS v3 (play CDN for single-file usage) ═══ -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- ═══ CDN: FontAwesome 6 for icons ═══ -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-  <!-- ═══ Google Fonts: Orbitron (headings) + Inter (body) ═══ -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- ═══ Tailwind Config: extend theme with custom fonts & colours ═══ -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { orbitron: ['Orbitron','sans-serif'], inter: ['Inter','sans-serif'] },
-          colors: {
-            neonPurple: '#b026ff',
-            neonGreen:  '#39ff14',
-            deepBg:     '#05060f',
-            cardBg:     'rgba(15,15,30,0.65)',
-          }
+          fontFamily: { heading: ['Space Grotesk','sans-serif'], body: ['Inter','sans-serif'] },
+          colors: { accent: '#818cf8', surface: '#0f1117', card: 'rgba(17,19,28,0.72)' }
         }
       }
     };
   </script>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       CUSTOM CSS — glassmorphism, glowing borders, gradient text,
-       3D hover transforms, scrollbar, and keyframe animations
-       ═══════════════════════════════════════════════════════════════ -->
   <style>
-    /* --- CSS Custom Properties (Design Tokens) --- */
     :root {
-      --neon-purple: #b026ff;
-      --neon-green:  #39ff14;
-      --neon-cyan:   #00f0ff;
-      --deep-bg:     #05060f;
-      --card-bg:     rgba(15,15,30,0.65);
-      --glass-border:rgba(176,38,255,0.25);
-      --glow-sm:     0 0 8px var(--neon-purple), 0 0 20px rgba(176,38,255,0.3);
-      --glow-lg:     0 0 15px var(--neon-purple), 0 0 40px rgba(176,38,255,0.4);
+      --accent: #818cf8;
+      --accent-muted: #6366f1;
+      --teal: #5eead4;
+      --surface: #0f1117;
+      --card-bg: rgba(17,19,28,0.72);
+      --border: rgba(129,140,248,0.12);
+      --border-hover: rgba(129,140,248,0.30);
+      --glow-sm: 0 0 12px rgba(129,140,248,0.12);
+      --glow-lg: 0 0 20px rgba(129,140,248,0.18);
     }
 
-    /* --- Global Reset & Base --- */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--deep-bg);
-      color: #e0e0e0;
-      overflow-x: hidden;
-      cursor: none; /* hide default cursor; we render a custom one */
-    }
+    body { font-family:'Inter',sans-serif; background:var(--surface); color:#c8cdd5; overflow-x:hidden; cursor:none; }
 
-    /* --- Custom Scrollbar (Webkit) --- */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0a0a1a; }
-    ::-webkit-scrollbar-thumb { background: var(--neon-purple); border-radius: 3px; }
+    ::-webkit-scrollbar { width:5px }
+    ::-webkit-scrollbar-track { background:#0a0b10 }
+    ::-webkit-scrollbar-thumb { background:var(--accent); border-radius:3px }
 
-    /* --- Custom Cursor --- */
-    #custom-cursor {
-      position: fixed; width: 18px; height: 18px;
-      border: 2px solid var(--neon-green);
-      border-radius: 50%; pointer-events: none;
-      transform: translate(-50%,-50%);
-      transition: width .2s, height .2s, border-color .2s;
-      z-index: 9999; mix-blend-mode: difference;
-    }
-    #cursor-dot {
-      position: fixed; width: 5px; height: 5px;
-      background: var(--neon-green);
-      border-radius: 50%; pointer-events: none;
-      transform: translate(-50%,-50%);
-      z-index: 10000;
-    }
+    /* Custom Cursor */
+    #custom-cursor { position:fixed; width:18px; height:18px; border:1.5px solid var(--accent); border-radius:50%; pointer-events:none; transform:translate(-50%,-50%); transition:width .2s,height .2s,border-color .2s; z-index:9999; mix-blend-mode:difference }
+    #cursor-dot { position:fixed; width:4px; height:4px; background:var(--accent); border-radius:50%; pointer-events:none; transform:translate(-50%,-50%); z-index:10000 }
 
-    /* --- Particle Canvas (behind everything) --- */
-    #particle-canvas {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0; /* behind content */
-    }
+    #particle-canvas { position:fixed; inset:0; width:100%; height:100%; z-index:0 }
+    #scroll-overlay { position:fixed; inset:0; background:rgba(0,0,0,0); pointer-events:none; z-index:1; transition:background .4s }
 
-    /* --- Dark Scroll Overlay — darkens as user scrolls --- */
-    #scroll-overlay {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0);
-      pointer-events: none; z-index: 1;
-      transition: background 0.4s;
-    }
+    /* Glass Card */
+    .glass { background:var(--card-bg); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1px solid var(--border); border-radius:.75rem }
+    .glass-hover { transition:box-shadow .4s,border-color .4s,transform .3s }
+    .glass-hover:hover { border-color:var(--border-hover); box-shadow:var(--glow-sm) }
 
-    /* --- Glassmorphism Card --- */
-    .glass {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: 1rem;
-    }
+    .accent-text { color:var(--accent) }
+    .teal-text { color:var(--teal) }
 
-    /* Glow intensifies on hover */
-    .glass-hover {
-      transition: box-shadow .4s, border-color .4s, transform .4s;
-    }
-    .glass-hover:hover {
-      border-color: var(--neon-purple);
-      box-shadow: var(--glow-lg);
-    }
+    .heading-gradient { background:linear-gradient(135deg,#e2e8f0,var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text }
 
-    /* --- Gradient Text Utility --- */
-    .gradient-text {
-      background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-cyan) 50%, var(--neon-green) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    /* Buttons with squish micro-interaction */
+    .btn { position:relative; display:inline-flex; align-items:center; gap:.5rem; padding:.65rem 1.5rem; border:1px solid var(--border-hover); border-radius:.5rem; color:#e2e8f0; font-family:'Space Grotesk',sans-serif; font-size:.82rem; text-decoration:none; transition:box-shadow .3s,transform .15s,border-color .3s }
+    .btn:hover { box-shadow:var(--glow-sm); transform:translateY(-2px); border-color:var(--accent) }
+    .btn:active { transform:scale(.95) translateY(0) }  /* squish on press */
+    .btn-primary { border-color:var(--accent) }
+    .btn-primary:hover { box-shadow:var(--glow-lg) }
 
-    /* --- Neon Glow Button --- */
-    .neon-btn {
-      position: relative;
-      display: inline-flex; align-items: center; gap: .5rem;
-      padding: .75rem 1.75rem;
-      border: 1px solid var(--neon-purple);
-      border-radius: .5rem;
-      color: #fff;
-      font-family: 'Orbitron', sans-serif;
-      font-size: .85rem;
-      text-decoration: none;
-      overflow: hidden;
-      transition: box-shadow .3s, transform .3s, color .3s;
-    }
-    .neon-btn::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(176,38,255,.15), rgba(57,255,20,.10));
-      opacity: 0; transition: opacity .3s;
-    }
-    .neon-btn:hover { box-shadow: var(--glow-lg); transform: translateY(-3px); color: var(--neon-green); }
-    .neon-btn:hover::before { opacity: 1; }
+    /* Scroll Reveal */
+    .reveal { opacity:0; transform:translateY(35px); transition:opacity .7s ease,transform .7s ease }
+    .reveal.visible { opacity:1; transform:translateY(0) }
 
-    /* Alternate green button */
-    .neon-btn-green { border-color: var(--neon-green); }
-    .neon-btn-green:hover { box-shadow: 0 0 15px var(--neon-green), 0 0 40px rgba(57,255,20,0.35); }
+    .typewriter-cursor { display:inline-block; width:2px; height:1.1em; background:var(--accent); margin-left:2px; vertical-align:text-bottom; animation:blink .8s step-end infinite }
+    @keyframes blink { 50% { opacity:0 } }
 
-    /* --- Section Visibility (scroll-reveal) --- */
-    .reveal {
-      opacity: 0; transform: translateY(50px);
-      transition: opacity .8s ease, transform .8s ease;
-    }
-    .reveal.visible {
-      opacity: 1; transform: translateY(0);
-    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .float { animation:float 6s ease-in-out infinite }
+    .float-delay { animation:float 7s ease-in-out 1.5s infinite }
 
-    /* --- Typewriter Cursor Blink --- */
-    .typewriter-cursor {
-      display: inline-block; width: 2px; height: 1.2em;
-      background: var(--neon-green);
-      margin-left: 2px; vertical-align: text-bottom;
-      animation: blink .7s step-end infinite;
-    }
-    @keyframes blink { 50% { opacity: 0; } }
+    /* Timeline */
+    @keyframes subtlePulse { 0%,100%{box-shadow:0 0 4px rgba(129,140,248,.25)} 50%{box-shadow:0 0 10px rgba(129,140,248,.35)} }
+    .timeline-line { position:absolute; left:1.25rem; top:0; bottom:0; width:1px; background:linear-gradient(to bottom,var(--accent),var(--border)) }
+    .timeline-dot { position:absolute; left:.7rem; width:1.1rem; height:1.1rem; border-radius:50%; background:var(--surface); border:2px solid var(--accent); animation:subtlePulse 3s infinite; z-index:2 }
 
-    /* --- Floating Animation (hero decorative elements) --- */
-    @keyframes float {
-      0%,100% { transform: translateY(0) rotate(0deg); }
-      50%     { transform: translateY(-18px) rotate(3deg); }
-    }
-    .float { animation: float 5s ease-in-out infinite; }
-    .float-delay { animation: float 6s ease-in-out 1s infinite; }
+    .tilt-card { transform-style:preserve-3d; transition:transform .15s ease-out }
 
-    /* --- Glow Pulse (timeline dots) --- */
-    @keyframes glowPulse {
-      0%,100% { box-shadow: 0 0 6px var(--neon-purple); }
-      50%     { box-shadow: 0 0 18px var(--neon-purple), 0 0 36px rgba(176,38,255,0.35); }
-    }
+    .nav-link { position:relative }
+    .nav-link::after { content:''; position:absolute; bottom:-4px; left:50%; width:0; height:1.5px; background:var(--accent); transition:width .3s,left .3s }
+    .nav-link:hover::after,.nav-link.active::after { width:100%; left:0 }
 
-    /* --- Timeline Vertical Line --- */
-    .timeline-line {
-      position: absolute; left: 1.25rem; top: 0; bottom: 0;
-      width: 2px;
-      background: linear-gradient(to bottom, var(--neon-purple), var(--neon-green));
-    }
-    .timeline-dot {
-      position: absolute; left: .65rem; width: 1.25rem; height: 1.25rem;
-      border-radius: 50%;
-      background: var(--deep-bg);
-      border: 2px solid var(--neon-purple);
-      animation: glowPulse 2.5s infinite;
-      z-index: 2;
-    }
+    /* Skill Icon Pop */
+    .skill-icon-wrap { transition:transform .4s cubic-bezier(.34,1.56,.64,1),filter .4s }
+    .bento-card:hover .skill-icon-wrap { transform:translateZ(20px) scale(1.08); filter:drop-shadow(0 0 6px rgba(129,140,248,.2)) }
 
-    /* --- 3D Tilt Perspective Container --- */
-    .tilt-card { transform-style: preserve-3d; transition: transform .15s ease-out; }
+    /* Project Overlay */
+    .project-overlay { position:absolute; inset:0; background:rgba(15,17,23,.88); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .4s; border-radius:.75rem }
+    .project-card:hover .project-overlay { opacity:1 }
 
-    /* --- Navbar Active Link Indicator --- */
-    .nav-link { position: relative; }
-    .nav-link::after {
-      content: ''; position: absolute;
-      bottom: -4px; left: 50%; width: 0; height: 2px;
-      background: var(--neon-green);
-      transition: width .3s, left .3s;
-    }
-    .nav-link:hover::after,
-    .nav-link.active::after { width: 100%; left: 0; }
+    /* Terminal */
+    .terminal { background:rgba(13,14,22,.88); border:1px solid var(--border-hover); border-radius:.75rem; font-family:'Courier New',monospace; box-shadow:0 0 18px rgba(129,140,248,.05) }
+    .terminal-header { display:flex; gap:.4rem; padding:.55rem 1rem; border-bottom:1px solid var(--border) }
+    .terminal-dot { width:9px; height:9px; border-radius:50% }
 
-    /* --- Skill Card Pop-out Icon --- */
-    .skill-icon-wrap {
-      transition: transform .4s cubic-bezier(.34,1.56,.64,1), filter .4s;
-    }
-    .skill-card:hover .skill-icon-wrap {
-      transform: translateZ(30px) scale(1.2);
-      filter: drop-shadow(0 0 12px var(--neon-purple));
-    }
+    /* Social Icons */
+    .social-icon { position:relative; width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:1px solid var(--border); background:var(--card-bg); backdrop-filter:blur(8px); color:#94a3b8; font-size:1rem; transition:border-color .3s,box-shadow .3s,color .3s,transform .3s }
+    .social-icon:hover { border-color:var(--accent); box-shadow:var(--glow-sm); color:var(--accent); transform:translateY(-4px) }
+    .social-icon .tip { position:absolute; bottom:120%; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; padding:.2rem .55rem; border-radius:.25rem; font-family:'Inter',sans-serif; font-size:.65rem; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .3s,bottom .3s }
+    .social-icon:hover .tip { opacity:1; bottom:130% }
 
-    /* --- Project Card Hover Reveal --- */
-    .project-overlay {
-      position: absolute; inset: 0;
-      background: rgba(5,6,15,.85);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; transition: opacity .4s;
-      border-radius: 1rem;
-    }
-    .project-card:hover .project-overlay { opacity: 1; }
+    .tag { font-size:.7rem; padding:.2rem .6rem; border-radius:9999px; border:1px solid var(--border); color:#94a3b8; transition:border-color .3s,color .3s }
+    .tag:hover { border-color:var(--accent); color:var(--accent) }
 
-    /* --- Terminal-style Contact Card --- */
-    .terminal {
-      background: rgba(10,10,25,.85);
-      border: 1px solid var(--neon-green);
-      border-radius: .75rem;
-      font-family: 'Courier New', monospace;
-      box-shadow: 0 0 20px rgba(57,255,20,.15);
+    /* ── BENTO GRID ── */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: minmax(120px, auto);
+      gap: 1rem;
     }
-    .terminal-header {
-      display: flex; gap: .4rem; padding: .6rem 1rem;
-      border-bottom: 1px solid rgba(57,255,20,.2);
+    .bento-card {
+      transition: box-shadow .4s, border-color .4s, transform .3s;
     }
-    .terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
-
-    /* --- Footer Social Icon --- */
-    .social-icon {
-      position: relative;
-      width: 48px; height: 48px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%;
-      border: 1px solid var(--glass-border);
-      background: var(--card-bg);
-      backdrop-filter: blur(8px);
-      color: #ccc;
-      font-size: 1.15rem;
-      transition: border-color .3s, box-shadow .3s, color .3s, transform .3s;
-    }
-    .social-icon:hover {
-      border-color: var(--neon-purple);
+    .bento-card:hover {
+      border-color: var(--border-hover);
       box-shadow: var(--glow-sm);
-      color: var(--neon-green);
-      transform: translateY(-6px);
+      transform: translateY(-3px);
     }
-    /* Tooltip on hover */
-    .social-icon .tip {
-      position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
-      background: var(--neon-purple); color: #fff;
-      padding: .25rem .6rem; border-radius: .3rem;
-      font-family: 'Inter',sans-serif; font-size: .7rem; white-space: nowrap;
-      opacity: 0; pointer-events: none;
-      transition: opacity .3s, bottom .3s;
-    }
-    .social-icon:hover .tip { opacity: 1; bottom: 130%; }
-
-    /* --- Profile Photo Styling --- */
-    .profile-photo-wrap {
-      position: relative;
-      width: 180px; height: 180px;
-      margin: 0 auto 1.5rem;
-      border-radius: 50%;
-      padding: 4px;
-      background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan), var(--neon-green));
-      box-shadow: 0 0 25px rgba(176,38,255,0.3), 0 0 50px rgba(176,38,255,0.15);
-      transition: box-shadow .4s, transform .4s;
-    }
-    .profile-photo-wrap:hover {
-      box-shadow: 0 0 35px rgba(176,38,255,0.5), 0 0 70px rgba(57,255,20,0.2);
-      transform: scale(1.03);
-    }
-    .profile-photo-wrap img {
-      width: 100%; height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      border: 3px solid var(--deep-bg);
-    }
-
-    /* --- Responsive helpers --- */
+    /* Span variations */
+    .bento-wide   { grid-column: span 2; }
+    .bento-tall   { grid-row: span 2; }
+    .bento-feature { grid-column: span 2; grid-row: span 2; }
     @media (max-width: 768px) {
-      body { cursor: auto; }
-      #custom-cursor, #cursor-dot { display: none; }
-      .hero-title { font-size: 2.5rem !important; }
-      .profile-photo-wrap { width: 140px; height: 140px; }
+      .bento-grid { grid-template-columns: repeat(2, 1fr); }
+      .bento-wide, .bento-feature { grid-column: span 2; }
+      .bento-tall { grid-row: span 1; }
+    }
+    @media (max-width: 480px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-wide, .bento-feature { grid-column: span 1; }
+    }
+
+    /* ── KINETIC TEXT ── */
+    .kinetic-heading {
+      transition: transform .1s ease-out;
+      will-change: transform;
+    }
+
+    /* ── CHATBOT ── */
+    #chat-fab {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff; border: none;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(129,140,248,.25);
+      z-index: 1000;
+      transition: transform .2s, box-shadow .2s;
+    }
+    #chat-fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(129,140,248,.35); }
+    #chat-fab:active { transform: scale(.94); }
+
+    #chat-panel {
+      position: fixed; bottom: 5.5rem; right: 1.5rem;
+      width: 370px; max-height: 520px;
+      background: rgba(13,14,22,.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-hover);
+      border-radius: .75rem;
+      display: none; flex-direction: column;
+      z-index: 1001;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5);
+      overflow: hidden;
+    }
+    #chat-panel.open { display: flex; }
+    #chat-header {
+      padding: .75rem 1rem;
+      background: rgba(129,140,248,.08);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: .6rem;
+    }
+    #chat-header .dot-online { width:8px; height:8px; border-radius:50%; background:#22c55e; }
+    #chat-messages {
+      flex: 1; overflow-y: auto; padding: 1rem;
+      display: flex; flex-direction: column; gap: .75rem;
+      max-height: 360px;
+      scrollbar-width: thin;
+    }
+    #chat-messages::-webkit-scrollbar { width:4px }
+    #chat-messages::-webkit-scrollbar-thumb { background:var(--accent); border-radius:2px }
+
+    .chat-msg {
+      max-width: 85%; padding: .55rem .85rem;
+      border-radius: .6rem; font-size: .78rem; line-height: 1.5;
+    }
+    .chat-bot { background: rgba(129,140,248,.08); color: #cbd5e1; align-self: flex-start; border: 1px solid var(--border); }
+    .chat-user { background: var(--accent); color: #fff; align-self: flex-end; }
+
+    #chat-input-wrap {
+      display: flex; padding: .6rem; gap: .4rem;
+      border-top: 1px solid var(--border);
+    }
+    #chat-input {
+      flex: 1; background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: .4rem; padding: .45rem .7rem;
+      color: #e2e8f0; font-size: .78rem; font-family: 'Inter',sans-serif;
+      outline: none; transition: border-color .3s;
+    }
+    #chat-input:focus { border-color: var(--accent); }
+    #chat-input::placeholder { color: #4a5568; }
+    #chat-send {
+      background: var(--accent); color: #fff; border: none;
+      border-radius: .4rem; padding: .45rem .7rem;
+      cursor: pointer; font-size: .8rem;
+      transition: opacity .2s;
+    }
+    #chat-send:hover { opacity: .85; }
+    #chat-send:active { transform: scale(.93); }
+
+    @media (max-width: 480px) {
+      #chat-panel { width: calc(100vw - 2rem); right: 1rem; bottom: 5rem; }
+    }
+    @media (max-width: 768px) {
+      body { cursor:auto }
+      #custom-cursor, #cursor-dot { display:none }
+      .hero-title { font-size:2.5rem !important }
     }
   </style>
 </head>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     BODY — All visible content lives here
-     ═══════════════════════════════════════════════════════════════ -->
-<body class="font-inter antialiased">
+<body class="font-body antialiased">
 
-  <!-- ─── Custom Cursor Elements ─── -->
   <div id="custom-cursor"></div>
   <div id="cursor-dot"></div>
-
-  <!-- ─── Particle Network Canvas (rendered by JS at bottom) ─── -->
   <canvas id="particle-canvas"></canvas>
-
-  <!-- ─── Scroll-Dependent Dark Overlay ─── -->
   <div id="scroll-overlay"></div>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       NAVIGATION — sticky glassmorphism top bar
-       ═══════════════════════════════════════════════════════════════ -->
-  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500"
-       style="background:rgba(5,6,15,0.4); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid rgba(176,38,255,0.15);">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
-      <!-- Logo / Brand -->
-      <a href="#hero" class="font-orbitron text-lg font-bold gradient-text tracking-wider">AA</a>
-      <!-- Navigation Links (hidden on mobile, shown via hamburger) -->
-      <div id="nav-links" class="hidden md:flex items-center gap-8 text-sm font-inter tracking-wide">
-        <a href="#hero"       class="nav-link text-gray-300 hover:text-white transition">Home</a>
-        <a href="#about"      class="nav-link text-gray-300 hover:text-white transition">About</a>
-        <a href="#skills"     class="nav-link text-gray-300 hover:text-white transition">Skills</a>
-        <a href="#experience" class="nav-link text-gray-300 hover:text-white transition">Experience</a>
-        <a href="#projects"   class="nav-link text-gray-300 hover:text-white transition">Projects</a>
-        <a href="#contact"    class="nav-link text-gray-300 hover:text-white transition">Contact</a>
+  <!-- ── NAVIGATION ── -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500" style="background:rgba(15,17,23,0.45); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid rgba(129,140,248,0.08);">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+      <a href="#hero" class="font-heading text-base font-semibold accent-text tracking-wider">AA</a>
+      <div id="nav-links" class="hidden md:flex items-center gap-8 text-sm tracking-wide">
+        <a href="#hero" class="nav-link text-gray-400 hover:text-white transition">Home</a>
+        <a href="#about" class="nav-link text-gray-400 hover:text-white transition">About</a>
+        <a href="#skills" class="nav-link text-gray-400 hover:text-white transition">Skills</a>
+        <a href="#experience" class="nav-link text-gray-400 hover:text-white transition">Experience</a>
+        <a href="#projects" class="nav-link text-gray-400 hover:text-white transition">Projects</a>
+        <a href="#contact" class="nav-link text-gray-400 hover:text-white transition">Contact</a>
       </div>
-      <!-- Mobile Hamburger -->
-      <button id="menu-toggle" class="md:hidden text-gray-300 text-xl" aria-label="Toggle menu">
-        <i class="fa-solid fa-bars"></i>
-      </button>
+      <button id="menu-toggle" class="md:hidden text-gray-400 text-lg" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
     </div>
-    <!-- Mobile Dropdown -->
     <div id="mobile-menu" class="hidden md:hidden flex-col gap-4 px-6 pb-4 text-sm">
-      <a href="#hero"       class="text-gray-300 hover:text-white transition">Home</a>
-      <a href="#about"      class="text-gray-300 hover:text-white transition">About</a>
-      <a href="#skills"     class="text-gray-300 hover:text-white transition">Skills</a>
-      <a href="#experience" class="text-gray-300 hover:text-white transition">Experience</a>
-      <a href="#projects"   class="text-gray-300 hover:text-white transition">Projects</a>
-      <a href="#contact"    class="text-gray-300 hover:text-white transition">Contact</a>
+      <a href="#hero" class="text-gray-400 hover:text-white transition">Home</a>
+      <a href="#about" class="text-gray-400 hover:text-white transition">About</a>
+      <a href="#skills" class="text-gray-400 hover:text-white transition">Skills</a>
+      <a href="#experience" class="text-gray-400 hover:text-white transition">Experience</a>
+      <a href="#projects" class="text-gray-400 hover:text-white transition">Projects</a>
+      <a href="#contact" class="text-gray-400 hover:text-white transition">Contact</a>
     </div>
   </nav>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       MAIN CONTENT WRAPPER (sits above the fixed canvas, z-index 2)
-       ═══════════════════════════════════════════════════════════════ -->
   <main class="relative z-10">
 
-    <!-- ═════════════════════════════════════════════════════════════
-         SECTION 1 — HERO
-         Massive gradient name, typewriter subtitle, floating CTAs.
-         ═════════════════════════════════════════════════════════════ -->
+    <!-- ── HERO ── -->
     <section id="hero" class="min-h-screen flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
-      <!-- Decorative floating shapes -->
-      <div class="absolute top-20 left-10 w-16 h-16 border border-neonPurple/30 rounded-lg float opacity-30"></div>
-      <div class="absolute bottom-32 right-14 w-20 h-20 border border-neonGreen/20 rounded-full float-delay opacity-20"></div>
+      <div class="absolute top-24 left-12 w-12 h-12 border border-accent/10 rounded-lg float opacity-20"></div>
+      <div class="absolute bottom-28 right-16 w-14 h-14 border border-accent/8 rounded-full float-delay opacity-15"></div>
 
-      <!-- Greeting line -->
-      <p class="text-neonGreen font-orbitron text-sm tracking-[.35em] mb-4 uppercase reveal">Hello, I'm</p>
+      <p class="accent-text font-heading text-xs tracking-[.4em] mb-5 uppercase reveal">Hello, I'm</p>
 
-      <!-- Name — solid white for a clean professional look -->
-      <h1 class="hero-title font-orbitron font-black text-5xl md:text-7xl lg:text-8xl text-white leading-tight mb-6 reveal" style="animation-delay:.1s">
+      <!-- Kinetic heading: reacts to mouse via JS -->
+      <h1 id="hero-name" class="kinetic-heading hero-title font-heading font-bold text-5xl md:text-7xl lg:text-8xl text-white leading-tight mb-5 reveal" style="animation-delay:.1s">
         Aabel Aby
       </h1>
 
-      <!-- Typewriter Subtitle -->
-      <p class="text-lg md:text-xl text-gray-400 mb-10 reveal" style="animation-delay:.2s">
+      <p class="text-base md:text-lg text-gray-500 mb-10 reveal" style="animation-delay:.2s">
         <span id="typewriter"></span><span class="typewriter-cursor"></span>
       </p>
 
-      <!-- CTA Buttons -->
       <div class="flex flex-wrap gap-4 justify-center reveal" style="animation-delay:.3s">
-        <a href="#projects" class="neon-btn"><i class="fa-solid fa-rocket"></i> View Work</a>
-        <a href="resume.pdf" download class="neon-btn neon-btn-green"><i class="fa-solid fa-download"></i> Download CV</a>
+        <a href="#projects" class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i> View Work</a>
+        <a href="resume.pdf" download class="btn"><i class="fa-solid fa-download"></i> Download CV</a>
       </div>
 
-      <!-- Scroll-down indicator -->
-      <div class="absolute bottom-8 flex flex-col items-center gap-2 text-gray-500 text-xs tracking-widest animate-bounce">
-        <span>SCROLL</span>
-        <i class="fa-solid fa-chevron-down"></i>
+      <div class="absolute bottom-8 flex flex-col items-center gap-2 text-gray-600 text-xs tracking-widest animate-bounce">
+        <span>SCROLL</span><i class="fa-solid fa-chevron-down text-[10px]"></i>
       </div>
     </section>
 
-    <!-- ═════════════════════════════════════════════════════════════
-         SECTION 2 — ABOUT
-         Split layout: bio card (left) + education timeline (right)
-         ═════════════════════════════════════════════════════════════ -->
+    <!-- ── ABOUT ── -->
     <section id="about" class="py-24 px-4 max-w-6xl mx-auto">
-      <!-- Section Heading -->
-      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-16 reveal">About Me</h2>
-
+      <h2 class="kinetic-heading font-heading text-2xl md:text-3xl font-semibold text-center heading-gradient mb-14 reveal">About Me</h2>
       <div class="grid md:grid-cols-2 gap-10 items-start">
-        <!-- Left: Profile Photo + Bio Card -->
         <div class="glass glass-hover p-8 reveal">
-          <!-- Profile Photo -->
-          <div class="profile-photo-wrap">
-            <img src="profile.jpg" alt="Aabel Aby — Profile Photo" />
-          </div>
-          <h3 class="font-orbitron text-xl text-neonPurple mb-4 text-center">Who I Am</h3>
-          <p class="text-gray-300 leading-relaxed mb-4">
-            I'm <span class="text-white font-semibold">Aabel Aby</span>, a BTech Computer Science &amp; Engineering student at
-            <span class="text-neonGreen">Viswajyothi College of Engineering &amp; Technology</span> with a CGPA of
-            <span class="text-neonPurple font-bold">8.62</span>. I'm passionate about leveraging deep learning, computer vision,
-            and web technologies to build tools that make a real-world difference.
+          <h3 class="font-heading text-lg accent-text mb-4">Who I Am</h3>
+          <p class="text-gray-400 leading-relaxed mb-4 text-sm">
+            I'm <span class="text-gray-200 font-medium">Aabel Aby</span>, a BTech Computer Science &amp; Engineering student at
+            <span class="accent-text">Viswajyothi College of Engineering &amp; Technology</span> with a CGPA of
+            <span class="text-gray-200 font-semibold">8.62</span>. Passionate about deep learning, computer vision, and pragmatic software engineering.
           </p>
-          <p class="text-gray-400 leading-relaxed mb-6">
-            Currently interning at <span class="text-neonGreen">Infosys</span> on a Personal Wealth Management project,
-            I thrive at the intersection of innovation and execution. Beyond code, I capture stories through photography
-            and design engaging poster art.
+          <p class="text-gray-500 leading-relaxed mb-6 text-sm">
+            Currently interning at <span class="accent-text">Infosys</span> on a Personal Wealth Management project.
+            Beyond code, I capture stories through photography and design.
           </p>
-          <!-- Quick stats row -->
-          <div class="grid grid-cols-3 gap-4 text-center">
-            <div class="glass p-3 rounded-lg">
-              <p class="font-orbitron text-neonGreen text-xl font-bold">8.62</p>
-              <p class="text-xs text-gray-500 mt-1">CGPA</p>
-            </div>
-            <div class="glass p-3 rounded-lg">
-              <p class="font-orbitron text-neonPurple text-xl font-bold">97.1%</p>
-              <p class="text-xs text-gray-500 mt-1">HSE Score</p>
-            </div>
-            <div class="glass p-3 rounded-lg">
-              <p class="font-orbitron text-neonCyan text-xl font-bold" style="color:var(--neon-cyan)">2+</p>
-              <p class="text-xs text-gray-500 mt-1">Projects</p>
-            </div>
+          <div class="grid grid-cols-3 gap-3 text-center">
+            <div class="glass p-3 rounded-lg"><p class="font-heading accent-text text-lg font-bold">8.62</p><p class="text-[11px] text-gray-600 mt-1">CGPA</p></div>
+            <div class="glass p-3 rounded-lg"><p class="font-heading text-gray-300 text-lg font-bold">97.1%</p><p class="text-[11px] text-gray-600 mt-1">HSE Score</p></div>
+            <div class="glass p-3 rounded-lg"><p class="font-heading teal-text text-lg font-bold">2+</p><p class="text-[11px] text-gray-600 mt-1">Projects</p></div>
           </div>
         </div>
-
-        <!-- Right: Education Timeline -->
         <div class="relative pl-12 reveal">
           <div class="timeline-line"></div>
-
-          <!-- Timeline Item 1: BTech -->
-          <div class="relative mb-10">
-            <div class="timeline-dot" style="top:.35rem"></div>
-            <div class="glass p-5 ml-4 glass-hover">
-              <span class="text-xs text-neonGreen font-orbitron tracking-wider">2022 — Present</span>
-              <h4 class="text-white font-semibold mt-1">BTech CSE</h4>
-              <p class="text-gray-400 text-sm">Viswajyothi College of Engineering &amp; Technology</p>
-              <p class="text-gray-500 text-xs mt-1">CGPA: 8.62</p>
-            </div>
-          </div>
-
-          <!-- Timeline Item 2: High School -->
-          <div class="relative mb-10">
-            <div class="timeline-dot" style="top:.35rem"></div>
-            <div class="glass p-5 ml-4 glass-hover">
-              <span class="text-xs text-neonGreen font-orbitron tracking-wider">High School</span>
-              <h4 class="text-white font-semibold mt-1">HSE Computer Science</h4>
-              <p class="text-gray-400 text-sm">Mar Coorilose Memorial HSS</p>
-              <p class="text-gray-500 text-xs mt-1">Score: 97.1%</p>
-            </div>
-          </div>
-
-          <!-- Timeline Item 3: Infosys Internship -->
-          <div class="relative">
-            <div class="timeline-dot" style="top:.35rem; border-color:var(--neon-green);"></div>
-            <div class="glass p-5 ml-4 glass-hover">
-              <span class="text-xs text-neonPurple font-orbitron tracking-wider">Jan 2026 — Present</span>
-              <h4 class="text-white font-semibold mt-1">Intern — Infosys</h4>
-              <p class="text-gray-400 text-sm">Personal Wealth Management Project</p>
-            </div>
-          </div>
+          <div class="relative mb-10"><div class="timeline-dot" style="top:.35rem"></div><div class="glass p-5 ml-4 glass-hover"><span class="text-[11px] accent-text font-heading tracking-wider">2022 — Present</span><h4 class="text-gray-200 font-medium mt-1 text-sm">BTech CSE</h4><p class="text-gray-500 text-xs">Viswajyothi College of Engineering &amp; Technology</p><p class="text-gray-600 text-xs mt-1">CGPA: 8.62</p></div></div>
+          <div class="relative mb-10"><div class="timeline-dot" style="top:.35rem"></div><div class="glass p-5 ml-4 glass-hover"><span class="text-[11px] accent-text font-heading tracking-wider">High School</span><h4 class="text-gray-200 font-medium mt-1 text-sm">HSE Computer Science</h4><p class="text-gray-500 text-xs">Mar Coorilose Memorial HSS</p><p class="text-gray-600 text-xs mt-1">Score: 97.1%</p></div></div>
+          <div class="relative"><div class="timeline-dot" style="top:.35rem; border-color:var(--teal)"></div><div class="glass p-5 ml-4 glass-hover"><span class="text-[11px] teal-text font-heading tracking-wider">Jan 2026 — Present</span><h4 class="text-gray-200 font-medium mt-1 text-sm">Intern — Infosys</h4><p class="text-gray-500 text-xs">Personal Wealth Management Project</p></div></div>
         </div>
       </div>
     </section>
 
-    <!-- ═════════════════════════════════════════════════════════════
-         SECTION 3 — SKILLS
-         Glowing grid of skill cards with 3D pop-out icons on hover
-         ═════════════════════════════════════════════════════════════ -->
+    <!-- ── SKILLS — BENTO GRID ── -->
     <section id="skills" class="py-24 px-4 max-w-6xl mx-auto">
-      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-16 reveal">Tech Arsenal</h2>
-
-      <!-- Skills Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-        <!-- Each card: glass + tilt + hover glow -->
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3 text-neonPurple"><i class="fa-brands fa-python"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">Python</p>
+      <h2 class="kinetic-heading font-heading text-2xl md:text-3xl font-semibold text-center heading-gradient mb-14 reveal">Technical Skills</h2>
+      <div class="bento-grid reveal">
+        <!-- Feature card: Python (large) -->
+        <div class="bento-card bento-wide glass tilt-card p-6 flex items-center gap-5" style="perspective:800px">
+          <div class="skill-icon-wrap text-4xl accent-text"><i class="fa-brands fa-python"></i></div>
+          <div><p class="text-sm text-gray-200 font-medium">Python</p><p class="text-xs text-gray-500 mt-1">ML, Scripting, Django backends</p></div>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3 text-neonGreen"><i class="fa-solid fa-c"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">C</p>
+        <!-- ML card -->
+        <div class="bento-card bento-wide glass tilt-card p-6 flex items-center gap-5" style="perspective:800px">
+          <div class="skill-icon-wrap text-4xl text-gray-400"><i class="fa-solid fa-brain"></i></div>
+          <div><p class="text-sm text-gray-200 font-medium">Machine Learning</p><p class="text-xs text-gray-500 mt-1">Deep Learning, Computer Vision</p></div>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3" style="color:var(--neon-cyan)"><i class="fa-brands fa-html5"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">HTML</p>
+        <!-- Regular cards -->
+        <div class="bento-card glass tilt-card p-5 flex flex-col items-center justify-center text-center" style="perspective:800px">
+          <div class="skill-icon-wrap text-3xl teal-text mb-2"><i class="fa-brands fa-html5"></i></div>
+          <p class="text-xs text-gray-400 font-medium">HTML</p>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3 text-neonPurple"><i class="fa-brands fa-css3-alt"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">CSS</p>
+        <div class="bento-card glass tilt-card p-5 flex flex-col items-center justify-center text-center" style="perspective:800px">
+          <div class="skill-icon-wrap text-3xl accent-text mb-2"><i class="fa-brands fa-css3-alt"></i></div>
+          <p class="text-xs text-gray-400 font-medium">CSS</p>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3 text-neonGreen"><i class="fa-solid fa-database"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">SQL</p>
+        <div class="bento-card glass tilt-card p-5 flex flex-col items-center justify-center text-center" style="perspective:800px">
+          <div class="skill-icon-wrap text-3xl text-gray-400 mb-2"><i class="fa-solid fa-database"></i></div>
+          <p class="text-xs text-gray-400 font-medium">SQL</p>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3" style="color:var(--neon-cyan)"><i class="fa-solid fa-globe"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">Django</p>
+        <div class="bento-card glass tilt-card p-5 flex flex-col items-center justify-center text-center" style="perspective:800px">
+          <div class="skill-icon-wrap text-3xl teal-text mb-2"><i class="fa-solid fa-globe"></i></div>
+          <p class="text-xs text-gray-400 font-medium">Django</p>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3 text-neonPurple"><i class="fa-brands fa-git-alt"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">Git</p>
+        <!-- Wide card: Git -->
+        <div class="bento-card bento-wide glass tilt-card p-6 flex items-center gap-5" style="perspective:800px">
+          <div class="skill-icon-wrap text-4xl accent-text"><i class="fa-brands fa-git-alt"></i></div>
+          <div><p class="text-sm text-gray-200 font-medium">Git</p><p class="text-xs text-gray-500 mt-1">Version control, GitHub workflows</p></div>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3 text-neonGreen"><i class="fa-solid fa-brain"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">Machine Learning</p>
+        <div class="bento-card glass tilt-card p-5 flex flex-col items-center justify-center text-center" style="perspective:800px">
+          <div class="skill-icon-wrap text-3xl text-gray-400 mb-2"><i class="fa-solid fa-c"></i></div>
+          <p class="text-xs text-gray-400 font-medium">C</p>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3" style="color:var(--neon-cyan)"><i class="fa-brands fa-java"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">Java</p>
+        <div class="bento-card glass tilt-card p-5 flex flex-col items-center justify-center text-center" style="perspective:800px">
+          <div class="skill-icon-wrap text-3xl teal-text mb-2"><i class="fa-brands fa-java"></i></div>
+          <p class="text-xs text-gray-400 font-medium">Java</p>
         </div>
-        <div class="skill-card glass glass-hover tilt-card p-6 text-center reveal" style="perspective:800px">
-          <div class="skill-icon-wrap text-4xl mb-3 text-neonPurple"><i class="fa-solid fa-camera"></i></div>
-          <p class="text-sm text-gray-300 font-semibold">Photography</p>
+        <div class="bento-card bento-wide glass tilt-card p-6 flex items-center gap-5" style="perspective:800px">
+          <div class="skill-icon-wrap text-4xl accent-text"><i class="fa-solid fa-camera"></i></div>
+          <div><p class="text-sm text-gray-200 font-medium">Photography</p><p class="text-xs text-gray-500 mt-1">Poster design, photo editing</p></div>
         </div>
       </div>
     </section>
 
-    <!-- ═════════════════════════════════════════════════════════════
-         SECTION 4 — EXPERIENCE & LEADERSHIP
-         Cyberpunk vertical timeline with glowing dots and glass cards
-         ═════════════════════════════════════════════════════════════ -->
+    <!-- ── EXPERIENCE & LEADERSHIP ── -->
     <section id="experience" class="py-24 px-4 max-w-4xl mx-auto">
-      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-16 reveal">Experience &amp; Leadership</h2>
-
+      <h2 class="kinetic-heading font-heading text-2xl md:text-3xl font-semibold text-center heading-gradient mb-14 reveal">Experience &amp; Leadership</h2>
       <div class="relative pl-12">
         <div class="timeline-line"></div>
-
-        <!-- Infosys Internship -->
-        <div class="relative mb-12 reveal">
-          <div class="timeline-dot" style="top:.35rem"></div>
-          <div class="glass glass-hover p-6 ml-4">
-            <span class="text-xs text-neonGreen font-orbitron tracking-wider">Jan 2026 — Present</span>
-            <h4 class="text-white font-semibold text-lg mt-1"><i class="fa-solid fa-building mr-2 text-neonPurple"></i>Intern — Infosys</h4>
-            <p class="text-gray-400 text-sm mt-2">Working on the <span class="text-neonGreen">Personal Wealth Management</span> project, contributing to financial technology solutions.</p>
-          </div>
-        </div>
-
-        <!-- Datavoid Trivia Coordinator -->
-        <div class="relative mb-12 reveal">
-          <div class="timeline-dot" style="top:.35rem; border-color:var(--neon-green)"></div>
-          <div class="glass glass-hover p-6 ml-4">
-            <span class="text-xs text-neonPurple font-orbitron tracking-wider">Bodhi Techfest 2025</span>
-            <h4 class="text-white font-semibold text-lg mt-1"><i class="fa-solid fa-trophy mr-2 text-neonGreen"></i>Coordinator — Datavoid Trivia</h4>
-            <p class="text-gray-400 text-sm mt-2">Handled design, marketing, and live coordination for <span class="text-white font-semibold">80+ teams</span>.</p>
-          </div>
-        </div>
-
-        <!-- GDG Member -->
-        <div class="relative mb-12 reveal">
-          <div class="timeline-dot" style="top:.35rem"></div>
-          <div class="glass glass-hover p-6 ml-4">
-            <span class="text-xs text-neonGreen font-orbitron tracking-wider">Student Club</span>
-            <h4 class="text-white font-semibold text-lg mt-1"><i class="fa-brands fa-google mr-2" style="color:var(--neon-cyan)"></i>Member — GDG Student Club, VJCET</h4>
-            <p class="text-gray-400 text-sm mt-2">Active member of Google Developer Groups, engaging in tech talks, workshops, and community projects.</p>
-          </div>
-        </div>
-
-        <!-- IIIC Member -->
-        <div class="relative reveal">
-          <div class="timeline-dot" style="top:.35rem; border-color:var(--neon-green)"></div>
-          <div class="glass glass-hover p-6 ml-4">
-            <span class="text-xs text-neonPurple font-orbitron tracking-wider">Institutional Body</span>
-            <h4 class="text-white font-semibold text-lg mt-1"><i class="fa-solid fa-handshake mr-2 text-neonPurple"></i>Member — IIIC, VJCET</h4>
-            <p class="text-gray-400 text-sm mt-2">Industry Institute Interaction Cell — bridging academia with industry through events and outreach.</p>
-          </div>
-        </div>
+        <div class="relative mb-12 reveal"><div class="timeline-dot" style="top:.35rem"></div><div class="glass glass-hover p-6 ml-4"><span class="text-[11px] accent-text font-heading tracking-wider">Jan 2026 — Present</span><h4 class="text-gray-200 font-medium text-sm mt-1"><i class="fa-solid fa-building mr-2 text-gray-500"></i>Intern — Infosys</h4><p class="text-gray-500 text-xs mt-2">Working on the <span class="accent-text">Personal Wealth Management</span> project, contributing to fintech solutions.</p></div></div>
+        <div class="relative mb-12 reveal"><div class="timeline-dot" style="top:.35rem; border-color:var(--teal)"></div><div class="glass glass-hover p-6 ml-4"><span class="text-[11px] teal-text font-heading tracking-wider">Bodhi Techfest 2025</span><h4 class="text-gray-200 font-medium text-sm mt-1"><i class="fa-solid fa-trophy mr-2 text-gray-500"></i>Coordinator — Datavoid Trivia</h4><p class="text-gray-500 text-xs mt-2">Design, marketing, live coordination for <span class="text-gray-300 font-medium">80+ teams</span>.</p></div></div>
+        <div class="relative mb-12 reveal"><div class="timeline-dot" style="top:.35rem"></div><div class="glass glass-hover p-6 ml-4"><span class="text-[11px] accent-text font-heading tracking-wider">Student Club</span><h4 class="text-gray-200 font-medium text-sm mt-1"><i class="fa-brands fa-google mr-2 text-gray-500"></i>Member — GDG Student Club, VJCET</h4><p class="text-gray-500 text-xs mt-2">Tech talks, workshops, community projects.</p></div></div>
+        <div class="relative reveal"><div class="timeline-dot" style="top:.35rem; border-color:var(--teal)"></div><div class="glass glass-hover p-6 ml-4"><span class="text-[11px] teal-text font-heading tracking-wider">Institutional Body</span><h4 class="text-gray-200 font-medium text-sm mt-1"><i class="fa-solid fa-handshake mr-2 text-gray-500"></i>Member — IIIC, VJCET</h4><p class="text-gray-500 text-xs mt-2">Industry Institute Interaction Cell — bridging academia with industry.</p></div></div>
       </div>
     </section>
 
-    <!-- ═════════════════════════════════════════════════════════════
-         SECTION 5 — PROJECTS
-         Large display cards with glowing tech-stack tags
-         ═════════════════════════════════════════════════════════════ -->
+    <!-- ── PROJECTS ── -->
     <section id="projects" class="py-24 px-4 max-w-6xl mx-auto">
-      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-16 reveal">Projects</h2>
-
-      <div class="grid md:grid-cols-2 gap-10">
-        <!-- Project 1: EchoVox Ai -->
-        <div class="project-card glass glass-hover tilt-card p-8 relative overflow-hidden reveal" style="perspective:800px">
-          <span class="text-xs text-neonGreen font-orbitron tracking-wider">Jul 2025 — Present</span>
-          <h3 class="font-orbitron text-xl text-white mt-2 mb-3"><i class="fa-solid fa-microphone-lines mr-2 text-neonPurple"></i>EchoVox Ai</h3>
-          <p class="text-sm text-neonPurple font-orbitron mb-3">Main Project — Visual Speech Recognition</p>
-          <p class="text-gray-400 text-sm leading-relaxed mb-5">
-            A deep learning system that reconstructs natural-sounding speech and text from silent videos by analyzing lip movements using advanced computer vision techniques.
-          </p>
-          <!-- Tech Tags -->
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="text-xs px-3 py-1 rounded-full border border-neonPurple/40 text-neonPurple">Deep Learning</span>
-            <span class="text-xs px-3 py-1 rounded-full border border-neonGreen/40 text-neonGreen">Computer Vision</span>
-            <span class="text-xs px-3 py-1 rounded-full border border-purple-400/40 text-purple-300">Speech Synthesis</span>
-          </div>
-          <!-- Hover Overlay with Link -->
-          <div class="project-overlay">
-            <a href="https://github.com/aabelaby" target="_blank" class="neon-btn"><i class="fa-brands fa-github"></i> View on GitHub</a>
-          </div>
+      <h2 class="kinetic-heading font-heading text-2xl md:text-3xl font-semibold text-center heading-gradient mb-14 reveal">Projects</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="project-card glass glass-hover tilt-card p-7 relative overflow-hidden reveal" style="perspective:800px">
+          <span class="text-[11px] accent-text font-heading tracking-wider">Jul 2025 — Present</span>
+          <h3 class="font-heading text-lg text-gray-200 mt-2 mb-1"><i class="fa-solid fa-microphone-lines mr-2 text-gray-500"></i>EchoVox Ai</h3>
+          <p class="text-xs accent-text font-heading mb-3">Main Project — Visual Speech Recognition</p>
+          <p class="text-gray-500 text-xs leading-relaxed mb-4">Deep learning system reconstructing speech from silent videos using lip movement analysis and computer vision.</p>
+          <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Deep Learning</span><span class="tag">Computer Vision</span><span class="tag">Speech Synthesis</span></div>
+          <div class="project-overlay"><a href="https://github.com/aabelaby" target="_blank" class="btn btn-primary"><i class="fa-brands fa-github"></i> GitHub</a></div>
         </div>
-
-        <!-- Project 2: Skincare Recommendation -->
-        <div class="project-card glass glass-hover tilt-card p-8 relative overflow-hidden reveal" style="perspective:800px">
-          <span class="text-xs text-neonPurple font-orbitron tracking-wider">Dec 2024 — Mar 2025</span>
-          <h3 class="font-orbitron text-xl text-white mt-2 mb-3"><i class="fa-solid fa-flask mr-2 text-neonGreen"></i>Skincare Recommendations</h3>
-          <p class="text-sm text-neonGreen font-orbitron mb-3">Mini Project — Personalised Suggestions</p>
-          <p class="text-gray-400 text-sm leading-relaxed mb-5">
-            Tailored product suggestions based on unique skin types and concerns. Built with a full-stack approach combining machine intelligence with an intuitive web interface.
-          </p>
-          <!-- Tech Tags -->
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="text-xs px-3 py-1 rounded-full border border-neonPurple/40 text-neonPurple">Python</span>
-            <span class="text-xs px-3 py-1 rounded-full border border-neonGreen/40 text-neonGreen">Django</span>
-            <span class="text-xs px-3 py-1 rounded-full border border-purple-400/40 text-purple-300">HTML / CSS</span>
-            <span class="text-xs px-3 py-1 rounded-full border border-green-400/40 text-green-300">SQL</span>
-          </div>
-          <div class="project-overlay">
-            <a href="https://github.com/aabelaby" target="_blank" class="neon-btn neon-btn-green"><i class="fa-brands fa-github"></i> View on GitHub</a>
-          </div>
+        <div class="project-card glass glass-hover tilt-card p-7 relative overflow-hidden reveal" style="perspective:800px">
+          <span class="text-[11px] teal-text font-heading tracking-wider">Dec 2024 — Mar 2025</span>
+          <h3 class="font-heading text-lg text-gray-200 mt-2 mb-1"><i class="fa-solid fa-flask mr-2 text-gray-500"></i>Skincare Recommendations</h3>
+          <p class="text-xs teal-text font-heading mb-3">Mini Project — Personalised Suggestions</p>
+          <p class="text-gray-500 text-xs leading-relaxed mb-4">Tailored product suggestions based on skin types. Full-stack with Python, Django, HTML/CSS, SQL.</p>
+          <div class="flex flex-wrap gap-2 mb-3"><span class="tag">Python</span><span class="tag">Django</span><span class="tag">HTML/CSS</span><span class="tag">SQL</span></div>
+          <div class="project-overlay"><a href="https://github.com/aabelaby" target="_blank" class="btn btn-primary"><i class="fa-brands fa-github"></i> GitHub</a></div>
         </div>
       </div>
     </section>
 
-    <!-- ═════════════════════════════════════════════════════════════
-         SECTION 6 — CONTACT
-         Terminal / Holographic contact card
-         ═════════════════════════════════════════════════════════════ -->
+    <!-- ── CONTACT ── -->
     <section id="contact" class="py-24 px-4 max-w-3xl mx-auto">
-      <h2 class="font-orbitron text-3xl md:text-4xl font-bold text-center gradient-text mb-16 reveal">Get In Touch</h2>
-
+      <h2 class="kinetic-heading font-heading text-2xl md:text-3xl font-semibold text-center heading-gradient mb-14 reveal">Get In Touch</h2>
       <div class="terminal reveal">
-        <!-- Terminal chrome bar -->
         <div class="terminal-header">
-          <span class="terminal-dot" style="background:#ff5f57"></span>
-          <span class="terminal-dot" style="background:#febc2e"></span>
-          <span class="terminal-dot" style="background:#28c840"></span>
-          <span class="text-xs text-gray-500 ml-3 font-inter">contact@aabelaby ~ terminal</span>
+          <span class="terminal-dot" style="background:#ef4444"></span>
+          <span class="terminal-dot" style="background:#f59e0b"></span>
+          <span class="terminal-dot" style="background:#22c55e"></span>
+          <span class="text-[11px] text-gray-600 ml-3 font-body">contact@aabelaby</span>
         </div>
-        <!-- Terminal body -->
-        <div class="p-6 text-sm leading-loose">
-          <p><span class="text-neonGreen">aabel@portfolio</span><span class="text-gray-500">:~$</span> <span class="text-gray-300">cat contact_info.json</span></p>
-          <p class="mt-3 text-gray-400">{</p>
-          <p class="ml-6">"<span class="text-neonPurple">name</span>"&nbsp;&nbsp;&nbsp;&nbsp;: "<span class="text-white">Aabel Aby</span>",</p>
-          <p class="ml-6">"<span class="text-neonPurple">email</span>"&nbsp;&nbsp;&nbsp;: "<a href="mailto:aabelaby2003@gmail.com" class="text-neonGreen hover:underline">aabelaby2003@gmail.com</a>",</p>
-          <p class="ml-6">"<span class="text-neonPurple">phone</span>"&nbsp;&nbsp;&nbsp;: "<a href="tel:7306873357" class="text-neonGreen hover:underline">7306873357</a>",</p>
-          <p class="ml-6">"<span class="text-neonPurple">location</span>": "<span class="text-white">Muvattupuzha, Ernakulam</span>",</p>
-          <p class="ml-6">"<span class="text-neonPurple">site</span>"&nbsp;&nbsp;&nbsp;&nbsp;: "<a href="https://aabelaby.pages.dev" target="_blank" class="text-neonGreen hover:underline">aabelaby.pages.dev</a>"</p>
-          <p class="text-gray-400">}</p>
-          <p class="mt-3"><span class="text-neonGreen">aabel@portfolio</span><span class="text-gray-500">:~$</span> <span class="typewriter-cursor"></span></p>
+        <div class="p-6 text-xs leading-loose">
+          <p><span class="accent-text">aabel@portfolio</span><span class="text-gray-600">:~$</span> <span class="text-gray-400">cat contact.json</span></p>
+          <p class="mt-3 text-gray-500">{</p>
+          <p class="ml-6">"<span class="accent-text">name</span>"&nbsp;&nbsp;&nbsp;&nbsp;: "<span class="text-gray-300">Aabel Aby</span>",</p>
+          <p class="ml-6">"<span class="accent-text">email</span>"&nbsp;&nbsp;&nbsp;: "<a href="mailto:aabelaby2003@gmail.com" class="teal-text hover:underline">aabelaby2003@gmail.com</a>",</p>
+          <p class="ml-6">"<span class="accent-text">phone</span>"&nbsp;&nbsp;&nbsp;: "<a href="tel:7306873357" class="teal-text hover:underline">7306873357</a>",</p>
+          <p class="ml-6">"<span class="accent-text">location</span>": "<span class="text-gray-300">Muvattupuzha, Ernakulam</span>",</p>
+          <p class="ml-6">"<span class="accent-text">site</span>"&nbsp;&nbsp;&nbsp;&nbsp;: "<a href="https://aabelaby.pages.dev" target="_blank" class="teal-text hover:underline">aabelaby.pages.dev</a>"</p>
+          <p class="text-gray-500">}</p>
+          <p class="mt-3"><span class="accent-text">aabel@portfolio</span><span class="text-gray-600">:~$</span> <span class="typewriter-cursor"></span></p>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       FOOTER — Floating social icons with hover tooltips
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- ── FOOTER ── -->
   <footer class="relative z-10 border-t border-white/5 py-10 px-4">
     <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-      <!-- Left: brandmark -->
-      <p class="font-orbitron text-sm text-gray-600">&copy; 2026 <span class="gradient-text">Aabel Aby</span>. All rights reserved.</p>
-
-      <!-- Right: social icons -->
-      <div class="flex gap-5">
-        <!-- GitHub -->
-        <a href="https://github.com/aabelaby" target="_blank" class="social-icon" aria-label="GitHub">
-          <i class="fa-brands fa-github"></i>
-          <span class="tip">GitHub</span>
-        </a>
-        <!-- LinkedIn -->
-        <a href="https://www.linkedin.com/in/aabelaby1410/" target="_blank" class="social-icon" aria-label="LinkedIn">
-          <i class="fa-brands fa-linkedin-in"></i>
-          <span class="tip">LinkedIn</span>
-        </a>
-        <!-- Twitter / X -->
-        <a href="https://x.com/i_aabel" target="_blank" class="social-icon" aria-label="Twitter / X">
-          <i class="fa-brands fa-x-twitter"></i>
-          <span class="tip">Twitter / X</span>
-        </a>
-        <!-- Email -->
-        <a href="mailto:aabelaby2003@gmail.com" class="social-icon" aria-label="Email">
-          <i class="fa-solid fa-envelope"></i>
-          <span class="tip">Email</span>
-        </a>
+      <p class="font-heading text-xs text-gray-600">&copy; 2026 <span class="accent-text">Aabel Aby</span></p>
+      <div class="flex gap-4">
+        <a href="https://github.com/aabelaby" target="_blank" class="social-icon" aria-label="GitHub"><i class="fa-brands fa-github"></i><span class="tip">GitHub</span></a>
+        <a href="https://www.linkedin.com/in/aabelaby1410/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i><span class="tip">LinkedIn</span></a>
+        <a href="https://x.com/i_aabel" target="_blank" class="social-icon" aria-label="X"><i class="fa-brands fa-x-twitter"></i><span class="tip">X</span></a>
+        <a href="mailto:aabelaby2003@gmail.com" class="social-icon" aria-label="Email"><i class="fa-solid fa-envelope"></i><span class="tip">Email</span></a>
       </div>
     </div>
   </footer>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       JAVASCRIPT — All interactivity in one block
-       ═══════════════════════════════════════════════════════════════ -->
+  <!-- ── AI CHATBOT WIDGET ── -->
+  <button id="chat-fab" aria-label="Ask my portfolio"><i class="fa-solid fa-robot"></i></button>
+  <div id="chat-panel">
+    <div id="chat-header">
+      <span class="dot-online"></span>
+      <span class="font-heading text-sm text-gray-200">Ask My Portfolio</span>
+      <span class="text-[10px] text-gray-500 ml-auto">AI-powered</span>
+    </div>
+    <div id="chat-messages">
+      <div class="chat-msg chat-bot">Hi! I'm Aabel's portfolio assistant. Ask me anything — skills, projects, experience, or what makes Aabel a good fit for your role.</div>
+    </div>
+    <div id="chat-input-wrap">
+      <input id="chat-input" type="text" placeholder="e.g. Has Aabel worked with Python?" autocomplete="off" />
+      <button id="chat-send"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════
+       JAVASCRIPT
+       ════════════════════════════════════════════════════ -->
   <script>
-  /* ═══════════════════════════════════════════════════════════════
-     1. PARTICLE NETWORK — interactive starfield / mesh background
-     Renders particles on a full-screen <canvas>, draws lines
-     between nearby particles, and repels particles from the mouse.
-     ═══════════════════════════════════════════════════════════════ */
-  (function initParticles() {
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-
-    /* --- Resize canvas to always fill viewport --- */
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    /* --- Mouse position tracking for repulsion --- */
-    const mouse = { x: -9999, y: -9999 };
-    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-
-    /* --- Particle class --- */
-    const PARTICLE_COUNT = Math.min(100, Math.floor(window.innerWidth / 14));
-    const LINK_DIST = 150;   /* max distance to draw a connecting line */
-    const REPEL_DIST = 120;  /* mouse repulsion radius */
-
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.4;
-        this.vy = (Math.random() - 0.5) * 0.4;
-        this.r = Math.random() * 1.8 + 0.6;
-      }
-      update() {
-        /* Bounce off edges */
-        if (this.x < 0 || this.x > canvas.width)  this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-
-        /* Mouse repulsion */
-        const dx = this.x - mouse.x;
-        const dy = this.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < REPEL_DIST && dist > 0) {
-          const force = (REPEL_DIST - dist) / REPEL_DIST * 0.6;
-          this.vx += (dx / dist) * force;
-          this.vy += (dy / dist) * force;
-        }
-
-        /* Damping to prevent runaway speed */
-        this.vx *= 0.99;
-        this.vy *= 0.99;
-
-        this.x += this.vx;
-        this.y += this.vy;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(176,38,255,0.7)';
-        ctx.fill();
-      }
-    }
-
-    /* --- Create particles --- */
-    const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
-
-    /* --- Animation loop --- */
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      /* Update & draw particles */
-      particles.forEach(p => { p.update(); p.draw(); });
-
-      /* Draw connecting lines between nearby particles */
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < LINK_DIST) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            const opacity = 1 - dist / LINK_DIST;
-            ctx.strokeStyle = `rgba(57,255,20,${opacity * 0.15})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-    animate();
+  /* ── 1. PARTICLE NETWORK ── */
+  (function(){
+    const c=document.getElementById('particle-canvas'),x=c.getContext('2d');
+    function resize(){c.width=innerWidth;c.height=innerHeight}addEventListener('resize',resize);resize();
+    const mouse={x:-9999,y:-9999};addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+    const N=Math.min(65,Math.floor(innerWidth/22)),LD=140,RD=100;
+    class P{constructor(){this.x=Math.random()*c.width;this.y=Math.random()*c.height;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.r=Math.random()*1.3+.5}
+    update(){if(this.x<0||this.x>c.width)this.vx*=-1;if(this.y<0||this.y>c.height)this.vy*=-1;const dx=this.x-mouse.x,dy=this.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);if(d<RD&&d>0){const f=(RD-d)/RD*.4;this.vx+=dx/d*f;this.vy+=dy/d*f}this.vx*=.99;this.vy*=.99;this.x+=this.vx;this.y+=this.vy}
+    draw(){x.beginPath();x.arc(this.x,this.y,this.r,0,Math.PI*2);x.fillStyle='rgba(129,140,248,.3)';x.fill()}}
+    const ps=Array.from({length:N},()=>new P);
+    !function anim(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.update();p.draw()});for(let i=0;i<ps.length;i++)for(let j=i+1;j<ps.length;j++){const dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<LD){x.beginPath();x.moveTo(ps[i].x,ps[i].y);x.lineTo(ps[j].x,ps[j].y);x.strokeStyle=`rgba(129,140,248,${(1-d/LD)*.06})`;x.lineWidth=.5;x.stroke()}}requestAnimationFrame(anim)}()
   })();
 
-  /* ═══════════════════════════════════════════════════════════════
-     2. TYPEWRITER EFFECT — cycles through phrases in the subtitle
-     ═══════════════════════════════════════════════════════════════ */
-  (function initTypewriter() {
-    const el = document.getElementById('typewriter');
-    const phrases = [
-      'Exploring technologies to create a significant impact.',
-      'BTech CSE Student & ML Enthusiast.',
-      'Currently interning at Infosys.',
-      'Photography • Design • Code.'
+  /* ── 2. TYPEWRITER ── */
+  (function(){
+    const el=document.getElementById('typewriter'),phrases=['Exploring technologies to create a significant impact.','BTech CSE Student & ML Enthusiast.','Currently interning at Infosys.','Photography · Design · Code.'];
+    let pi=0,ci=0,del=false;
+    !function tick(){const cur=phrases[pi];el.textContent=cur.substring(0,ci);if(!del){ci++;if(ci>cur.length){del=true;return setTimeout(tick,2000)}}else{ci--;if(ci<0){ci=0;del=false;pi=(pi+1)%phrases.length}}setTimeout(tick,del?30:55)}()
+  })();
+
+  /* ── 3. SCROLL REVEAL ── */
+  (function(){
+    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:.1});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  })();
+
+  /* ── 4. KINETIC TYPOGRAPHY — headings react to mouse ── */
+  (function(){
+    const headings=document.querySelectorAll('.kinetic-heading');
+    addEventListener('mousemove',e=>{
+      const cx=innerWidth/2, cy=innerHeight/2;
+      const dx=(e.clientX-cx)/cx, dy=(e.clientY-cy)/cy;
+      headings.forEach(h=>{
+        const rect=h.getBoundingClientRect();
+        if(rect.top>-200&&rect.bottom<innerHeight+200){
+          h.style.transform=`translate(${dx*4}px,${dy*2}px)`;
+        }
+      });
+    });
+  })();
+
+  /* ── 5. 3D TILT ── */
+  (function(){
+    document.querySelectorAll('.tilt-card').forEach(card=>{
+      card.addEventListener('mousemove',e=>{
+        const r=card.getBoundingClientRect();
+        const rx=((e.clientY-r.top-r.height/2)/(r.height/2))*-5;
+        const ry=((e.clientX-r.left-r.width/2)/(r.width/2))*5;
+        card.style.transform=`perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      });
+      card.addEventListener('mouseleave',()=>{card.style.transform='perspective(800px) rotateX(0) rotateY(0)'});
+    });
+  })();
+
+  /* ── 6. CUSTOM CURSOR ── */
+  (function(){
+    const cur=document.getElementById('custom-cursor'),dot=document.getElementById('cursor-dot');
+    let cx=0,cy=0,dx=0,dy=0;
+    addEventListener('mousemove',e=>{dx=e.clientX;dy=e.clientY});
+    !function r(){cx+=(dx-cx)*.15;cy+=(dy-cy)*.15;cur.style.left=cx+'px';cur.style.top=cy+'px';dot.style.left=dx+'px';dot.style.top=dy+'px';requestAnimationFrame(r)}();
+    document.querySelectorAll('a,button,.bento-card,.project-card').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{cur.style.width='36px';cur.style.height='36px';cur.style.borderColor='#e2e8f0'});
+      el.addEventListener('mouseleave',()=>{cur.style.width='18px';cur.style.height='18px';cur.style.borderColor='var(--accent)'});
+    });
+  })();
+
+  /* ── 7. DYNAMIC NAVBAR ── */
+  (function(){
+    const nav=document.getElementById('navbar'),ov=document.getElementById('scroll-overlay');
+    addEventListener('scroll',()=>{const s=scrollY;nav.style.background=`rgba(15,17,23,${Math.min(.92,.45+s/600)})`;ov.style.background=`rgba(0,0,0,${Math.min(.3,s/3500)})`});
+  })();
+
+  /* ── 8. MOBILE MENU ── */
+  (function(){
+    const t=document.getElementById('menu-toggle'),m=document.getElementById('mobile-menu');
+    t.addEventListener('click',()=>{m.classList.toggle('hidden');m.classList.toggle('flex')});
+    m.querySelectorAll('a').forEach(l=>{l.addEventListener('click',()=>{m.classList.add('hidden');m.classList.remove('flex')})});
+  })();
+
+  /* ── 9. ACTIVE NAV ── */
+  (function(){
+    const secs=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.nav-link');
+    addEventListener('scroll',()=>{let cur='';secs.forEach(s=>{if(scrollY>=s.offsetTop-120)cur=s.id});links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+cur)})});
+  })();
+
+  /* ══════════════════════════════════════════════════════════════
+     10. AI CHATBOT — "Ask My Portfolio" engine
+     Uses a client-side knowledge base of Aabel's resume data with
+     keyword matching and contextual response generation.
+     ══════════════════════════════════════════════════════════════ */
+  (function initChatbot(){
+    const fab=document.getElementById('chat-fab');
+    const panel=document.getElementById('chat-panel');
+    const input=document.getElementById('chat-input');
+    const sendBtn=document.getElementById('chat-send');
+    const messages=document.getElementById('chat-messages');
+
+    /* Toggle panel */
+    fab.addEventListener('click',()=>{ panel.classList.toggle('open'); if(panel.classList.contains('open')) input.focus(); });
+
+    /* Knowledge base — structured resume data */
+    const KB = {
+      name: 'Aabel Aby',
+      email: 'aabelaby2003@gmail.com',
+      phone: '7306873357',
+      location: 'Muvattupuzha, Ernakulam',
+      site: 'aabelaby.pages.dev',
+      github: 'https://github.com/aabelaby',
+      linkedin: 'https://www.linkedin.com/in/aabelaby1410/',
+      twitter: 'https://x.com/i_aabel',
+      education: [
+        { degree: 'BTech Computer Science and Engineering', institution: 'Viswajyothi College of Engineering & Technology', timeline: '2022 to Present', cgpa: '8.62' },
+        { degree: 'HSE Computer Science', institution: 'Mar Coorilose Memorial HSS', score: '97.1%' }
+      ],
+      internship: { role: 'Intern', company: 'Infosys', timeline: 'Jan 2026 to Present', project: 'Personal Wealth Management' },
+      projects: [
+        { name: 'EchoVox Ai', type: 'Main Project', desc: 'Deep learning system reconstructing natural-sounding speech and text from silent videos analyzing lip movements using computer vision.', tech: ['Deep Learning','Computer Vision','Speech Synthesis'], timeline: 'Jul 2025 to Present' },
+        { name: 'Personalized Skincare Recommendations', type: 'Mini Project', desc: 'Tailored product suggestions based on unique skin types and concerns.', tech: ['Python','Django','HTML','CSS','SQL'], timeline: 'Dec 2024 to Mar 2025' }
+      ],
+      skills: ['Python','C','HTML','CSS','SQL','Django','Git','Machine Learning','Java'],
+      leadership: [
+        'Coordinator of Datavoid Trivia at Bodhi Techfest 2025 — handled design, marketing, and live coordination for 80+ teams',
+        'Member of Google Developer Groups (GDG) Student Club at VJCET',
+        'Member of the Industry Institute Interaction Cell (IIIC) at VJCET'
+      ],
+      hobbies: ['Photography','Designing Posters','Photo Editing']
+    };
+
+    /* Intent patterns — maps keywords to response generators */
+    const intents = [
+      { keys: ['python'], resp: () => `Yes! Python is one of Aabel's primary languages. He uses it for ML projects, Django backends, and scripting. It's central to both his projects: EchoVox Ai (computer vision) and Skincare Recommendations (Django).` },
+      { keys: ['java'], resp: () => `Aabel has Java in his technical stack. It's part of his academic training at VJCET.` },
+      { keys: ['machine learning','ml','deep learning','ai','artificial intelligence'], resp: () => `Absolutely. Aabel is passionate about ML and deep learning. His main project, EchoVox Ai, is a deep learning system that reconstructs speech from silent videos using computer vision — a sophisticated application of ML.` },
+      { keys: ['skill','tech','stack','language','tool'], resp: () => `Aabel's technical skills include: ${KB.skills.join(', ')}. He also has interests in photography. His strongest areas are Python and Machine Learning.` },
+      { keys: ['infosys','intern','internship','work experience','wealth management'], resp: () => `Aabel is currently interning at Infosys (Jan 2026 – Present), working on the Personal Wealth Management project. He's contributing to financial technology solutions.` },
+      { keys: ['echovox','speech','lip','video','main project'], resp: () => `EchoVox Ai is Aabel's main project (Jul 2025 – Present). It's a deep learning system that reconstructs natural-sounding speech and text from silent videos by analyzing lip movements using advanced computer vision techniques.` },
+      { keys: ['skincare','skin','recommendation','mini project','django project'], resp: () => `The Skincare Recommendations project (Dec 2024 – Mar 2025) provides tailored product suggestions based on unique skin types. Built with Python, Django, HTML/CSS, and SQL.` },
+      { keys: ['project'], resp: () => `Aabel has 2 major projects:\n\n1. **EchoVox Ai** (Main) — Visual speech recognition using deep learning.\n2. **Skincare Recommendations** (Mini) — Personalised suggestions using Django.\n\nAsk me about either for more details!` },
+      { keys: ['education','college','university','degree','cgpa','gpa'], resp: () => `Aabel is pursuing a BTech in CSE at Viswajyothi College of Engineering & Technology (2022 – Present) with a CGPA of 8.62. He scored 97.1% in HSE Computer Science at Mar Coorilose Memorial HSS.` },
+      { keys: ['contact','email','phone','reach','hire','connect'], resp: () => `You can reach Aabel at:\n📧 aabelaby2003@gmail.com\n📱 7306873357\n🌐 aabelaby.pages.dev\n🔗 GitHub, LinkedIn, and X links are in the footer.` },
+      { keys: ['location','where','based','live','city'], resp: () => `Aabel is based in Muvattupuzha, Ernakulam, Kerala, India.` },
+      { keys: ['leadership','coordinator','datavoid','techfest','gdg','iiic','extracurricular','club'], resp: () => `Aabel has strong leadership experience:\n• Coordinated Datavoid Trivia at Bodhi Techfest 2025 (80+ teams)\n• Member of GDG Student Club at VJCET\n• Member of IIIC at VJCET` },
+      { keys: ['hobby','hobbies','interest','photography','poster','design'], resp: () => `Beyond coding, Aabel enjoys Photography, Designing Posters, and Photo Editing. He captures stories through his lens and creates engaging visual content.` },
+      { keys: ['github','git','repo','code'], resp: () => `Aabel's GitHub: github.com/aabelaby. He uses Git for version control across all his projects.` },
+      { keys: ['hire','fit','why','good','strong','strength','suitable','candidate'], resp: () => `Aabel is a strong candidate because:\n• Solid academic record (8.62 CGPA)\n• Hands-on industry experience at Infosys\n• Cutting-edge ML project (EchoVox Ai)\n• Leadership skills (coordinating 80+ teams)\n• Full-stack capability (Python, Django, SQL)\n• Active in tech communities (GDG, IIIC)` },
+      { keys: ['css','html','web','frontend','front-end'], resp: () => `Yes, Aabel has experience with HTML and CSS. He's built web interfaces, including the Skincare Recommendations project's frontend, and this very portfolio is a demonstration of his frontend skills.` },
+      { keys: ['sql','database','db'], resp: () => `Aabel works with SQL for database management. It was a key technology in his Skincare Recommendations project for storing user data and product information.` },
+      { keys: ['hello','hi','hey','greet'], resp: () => `Hey there! 👋 I'm Aabel's portfolio assistant. Ask me about his skills, projects, experience, education, or anything else you'd like to know!` },
+      { keys: ['thank','thanks','bye','goodbye'], resp: () => `You're welcome! Feel free to come back anytime. You can also reach Aabel at aabelaby2003@gmail.com. Have a great day! 👋` },
+      { keys: ['suggest','recommend','job','role','position','looking for','hiring'], resp: () => `Based on Aabel's profile, he'd be a great fit for:\n• ML/AI Engineer roles\n• Data Science positions\n• Python Developer roles\n• Full-stack Developer (Django)\n• Computer Vision Engineer\n\nHis Infosys internship also shows he can work in fintech. What role are you hiring for? I can tell you how Aabel's experience aligns!` },
+      { keys: ['computer vision','cv','image','visual'], resp: () => `Computer Vision is a key strength. Aabel's main project EchoVox Ai uses advanced CV techniques to analyze lip movements in video and reconstruct speech — demonstrating deep expertise in this domain.` },
+      { keys: ['django','web framework','backend'], resp: () => `Django is one of Aabel's tools. He built the Skincare Recommendations project using Django as the backend framework, paired with Python for the logic and SQL for the database.` },
     ];
-    let phraseIdx = 0, charIdx = 0, deleting = false;
 
-    function tick() {
-      const current = phrases[phraseIdx];
-      el.textContent = current.substring(0, charIdx);
+    /* Find the best matching intent */
+    function getResponse(query) {
+      const q = query.toLowerCase().trim();
+      if (!q) return "Please type a question about Aabel's portfolio!";
 
-      if (!deleting) {
-        charIdx++;
-        if (charIdx > current.length) {
-          deleting = true;
-          return setTimeout(tick, 1800); /* pause at end */
+      let bestMatch = null, bestScore = 0;
+      for (const intent of intents) {
+        let score = 0;
+        for (const key of intent.keys) {
+          if (q.includes(key)) score += key.length; /* longer keyword matches = higher confidence */
         }
-      } else {
-        charIdx--;
-        if (charIdx < 0) {
-          charIdx = 0; deleting = false;
-          phraseIdx = (phraseIdx + 1) % phrases.length;
-        }
+        if (score > bestScore) { bestScore = score; bestMatch = intent; }
       }
-      setTimeout(tick, deleting ? 35 : 65);
+
+      if (bestMatch && bestScore > 0) return bestMatch.resp();
+      return `I don't have a specific answer for that, but here's what I can help with:\n• Skills & technologies\n• Projects (EchoVox Ai, Skincare)\n• Education & CGPA\n• Infosys internship\n• Leadership & extracurriculars\n• Contact information\n• Why hire Aabel?\n\nTry asking one of these!`;
     }
-    tick();
-  })();
 
-  /* ═══════════════════════════════════════════════════════════════
-     3. SCROLL REVEAL — IntersectionObserver adds .visible class
-     ═══════════════════════════════════════════════════════════════ */
-  (function initReveal() {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  })();
-
-  /* ═══════════════════════════════════════════════════════════════
-     4. 3D TILT EFFECT — mousemove listener on .tilt-card elements
-     Calculates rotation based on cursor position relative to card.
-     ═══════════════════════════════════════════════════════════════ */
-  (function initTilt() {
-    document.querySelectorAll('.tilt-card').forEach(card => {
-      card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -8;
-        const rotateY = ((x - centerX) / centerX) * 8;
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
-      });
-    });
-  })();
-
-  /* ═══════════════════════════════════════════════════════════════
-     5. CUSTOM CURSOR — follows mouse with smooth trailing ring
-     ═══════════════════════════════════════════════════════════════ */
-  (function initCursor() {
-    const cursor = document.getElementById('custom-cursor');
-    const dot = document.getElementById('cursor-dot');
-
-    /* Smooth trailing for the ring */
-    let cx = 0, cy = 0, dx = 0, dy = 0;
-    window.addEventListener('mousemove', e => { dx = e.clientX; dy = e.clientY; });
-
-    function render() {
-      cx += (dx - cx) * 0.15;
-      cy += (dy - cy) * 0.15;
-      cursor.style.left = cx + 'px';
-      cursor.style.top = cy + 'px';
-      dot.style.left = dx + 'px';
-      dot.style.top = dy + 'px';
-      requestAnimationFrame(render);
+    /* Add a message bubble */
+    function addMsg(text, isUser) {
+      const div = document.createElement('div');
+      div.className = `chat-msg ${isUser ? 'chat-user' : 'chat-bot'}`;
+      div.innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
     }
-    render();
 
-    /* Grow cursor on interactive elements */
-    document.querySelectorAll('a, button, .skill-card, .project-card').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.width = '40px';
-        cursor.style.height = '40px';
-        cursor.style.borderColor = 'var(--neon-purple)';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.width = '18px';
-        cursor.style.height = '18px';
-        cursor.style.borderColor = 'var(--neon-green)';
-      });
-    });
-  })();
+    /* Handle send */
+    function handleSend() {
+      const q = input.value.trim();
+      if (!q) return;
+      addMsg(q, true);
+      input.value = '';
+      /* Simulate tiny "thinking" delay */
+      setTimeout(() => addMsg(getResponse(q), false), 400);
+    }
 
-  /* ═══════════════════════════════════════════════════════════════
-     6. DYNAMIC NAVBAR — opacity + blur increases on scroll
-     ═══════════════════════════════════════════════════════════════ */
-  (function initNavbar() {
-    const nav = document.getElementById('navbar');
-    const overlay = document.getElementById('scroll-overlay');
-
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      /* Increase navbar background opacity as user scrolls */
-      const opacity = Math.min(0.92, 0.4 + scrollY / 600);
-      nav.style.background = `rgba(5,6,15,${opacity})`;
-
-      /* Darken overlay slightly as user scrolls deeper */
-      const overlayOpacity = Math.min(0.35, scrollY / 3000);
-      overlay.style.background = `rgba(0,0,0,${overlayOpacity})`;
-    });
-  })();
-
-  /* ═══════════════════════════════════════════════════════════════
-     7. MOBILE MENU TOGGLE — hamburger button shows/hides links
-     ═══════════════════════════════════════════════════════════════ */
-  (function initMobileMenu() {
-    const toggle = document.getElementById('menu-toggle');
-    const menu = document.getElementById('mobile-menu');
-
-    toggle.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
-      menu.classList.toggle('flex');
-    });
-
-    /* Close menu when a link is tapped */
-    menu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        menu.classList.add('hidden');
-        menu.classList.remove('flex');
-      });
-    });
-  })();
-
-  /* ═══════════════════════════════════════════════════════════════
-     8. ACTIVE NAV LINK HIGHLIGHT — highlights current section
-     ═══════════════════════════════════════════════════════════════ */
-  (function initActiveNav() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(sec => {
-        const top = sec.offsetTop - 120;
-        if (window.scrollY >= top) current = sec.getAttribute('id');
-      });
-      navLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
-      });
-    });
+    sendBtn.addEventListener('click', handleSend);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') handleSend(); });
   })();
   </script>
 
